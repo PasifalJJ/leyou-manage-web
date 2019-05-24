@@ -23,7 +23,7 @@
       </v-flex>
       <v-flex>
         <v-upload
-          v-model="brand.image" url="/item/upload" :multiple="false" :pic-width="250" :pic-height="90"
+          v-model="brand.image" url="/upload/image" :multiple="false" :pic-width="250" :pic-height="90"
         />
       </v-flex>
     </v-layout>
@@ -78,9 +78,7 @@
           this.brand.categories = this.brand.categories.map(c => c.id);
           this.brand.letter = this.brand.letter.toUpperCase();
           // 将数据提交到后台
-          this.$http.post('/item/brand',{
-              brand: this.brand
-            }
+          this.$http.post('/item/brand',this.$qs.stringify(this.brand)
           ).then(() => {
             // 关闭窗口
             this.$message.success("保存成功！");
