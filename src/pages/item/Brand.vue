@@ -105,7 +105,8 @@
       search: {
         handler() {
           this.pagination.page=1;
-          this.getDataFromApi();
+          setTimeout(this.getDataFromApi(),300)
+
         }
       },
       show(val, oldVal) {
@@ -129,11 +130,10 @@
         this.isEdit = true;
         this.show = true;
         // 查询商品分类信息，进行回显
-        this.$http.get("/item/category/bid/" + item.id)
+        this.$http.get("/item/brand/bid/" + item.id)
           .then(resp => {
-            this.brand.categories = resp.data;
+            this.brand.categories = resp.data.categories;
           })
-
       },
       deleteBrand(item) {
         this.$message.confirm('此操作将永久删除该品牌, 是否继续?').then(() => {

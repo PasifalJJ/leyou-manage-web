@@ -14,16 +14,18 @@
       required
       mask="A"
     />
-    <v-cascader url="/item/category/list" required
+    <v-cascader url="/item/category/list"
+                required
                 v-model="brand.categories"
-                multiple label="商品分类"/>
+                multiple
+                label="商品分类"/>
     <v-layout row>
       <v-flex xs3>
         <span style="font-size: 16px; color: #444">品牌LOGO：</span>
       </v-flex>
       <v-flex>
         <v-upload
-          v-model="brand.image" url="/item/upload" :multiple="false" :pic-width="250" :pic-height="90"
+          v-model="brand.image" url="/upload/image" :multiple="false" :pic-width="250" :pic-height="90"
         />
       </v-flex>
     </v-layout>
@@ -65,9 +67,11 @@
     },
     watch: {
       oldBrand: {
+        immediate: true,
         deep: true,
         handler(val) {
-          Object.deepCopy(val, this.brand);
+          // Object.deepCopy(val, this.brand);
+          this.brand=val;
         }
       }
     },
@@ -78,9 +82,7 @@
           this.brand.categories = this.brand.categories.map(c => c.id);
           this.brand.letter = this.brand.letter.toUpperCase();
           // 将数据提交到后台
-          this.$http.post('/item/brand',{
-              brand: this.brand
-            }
+          this.$http.post('/item/brand',this.$qs.stringify(this.brand)
           ).then(() => {
             // 关闭窗口
             this.$message.success("保存成功！");

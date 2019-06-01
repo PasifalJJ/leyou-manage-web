@@ -128,7 +128,7 @@
         // 把当前点击IDE节点记录下来
         this.currentNode = node;
         // 判断点击的节点是否是父节点（只有点击到叶子节点才会弹窗）
-        if (!node.isParent) {
+        if (!node.parent) {
           // 如果是叶子节点，那么就发起ajax请求，去后台查询商品规格数据。
           this.$http.get("/item/spec/" + node.id)
             .then(resp => {

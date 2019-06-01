@@ -73,8 +73,7 @@ import MyBrand2Form from './MyBrand2Form.vue'
       },
       closeWindow(){
         this.show=false
-      }
-      ,
+      },
       loadPage() {
         if (this.pagination.page != null && this.pagination.rowsPerPage != null) {
           this.$http.get("/item/brand/list", {

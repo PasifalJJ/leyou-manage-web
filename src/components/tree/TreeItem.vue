@@ -110,12 +110,14 @@
             this.nodes.opened.open = false;
           }
           // 将自己记录为打开的节点
+          // this.nodes.opened = true;
           this.nodes.opened = this;
         }
         // 切换开闭状态
+        // this.open = !this.open;
         this.open = !this.open;
         // 如果已经是叶子节点,或者自己是关闭的，或者自己已经有儿子了，结束
-        if (!this.model.isParent || this.isFolder || !this.open) {
+        if (!this.model.parent || this.isFolder || !this.open) {
           return;
         }
         // 展开后查询子节点
@@ -133,13 +135,13 @@
         });
       },
       addChild: function () {
-        let child = {
-          id: 0,
-          name: '新的节点',
-          parentId: this.model.id,
-          isParent: false,
-          sort:this.model.children? this.model.children.length + 1:1
-        }
+          let child = {
+            id: 0,
+            name: '新的节点',
+            parentId: this.model.id,
+            isParent: false,
+            sort:this.model.children? this.model.children.length + 1:1
+          }
         if (!this.model.isParent) {
           Vue.set(this.model, 'children', [child]);
           this.model.isParent = true;

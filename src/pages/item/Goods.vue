@@ -92,7 +92,7 @@
 
 <script>
   import GoodsForm from './GoodsForm'
-  import {goodsData} from "../../mockDB";
+  // import {goodsData} from "../../mockDB";
 
   export default {
     name: "item",
@@ -107,7 +107,7 @@
         },// 过滤字段
         totalItems: 0,// 总条数
         items: [],// 表格数据
-        loading: true,
+        loading: false,
         pagination: {},// 分页信息
         headers: [// 表头
           {text: 'id', align: 'center', value: 'id'},
@@ -201,13 +201,28 @@
 
       },
       getDataFromApi() {
+        //从服务器加载数据
         this.loading = true;
-        setTimeout(() => {
-          // 返回假数据
-          this.items = goodsData.slice(0, 4);
-          this.totalItems = 25;
+        //发起请求
+        this.$http.get("/item/spu/page", {
+          params: {
+            key: this.search.key, // 搜索条件
+            page: this.pagination.page,// 当前页
+            rows: this.pagination.rowsPerPage,// 每页大小
+            sortBy: this.pagination.sortBy,// 排序字段
+            desc: this.pagination.descending,// 是否降序
+            saleable: this.search.saleable === 0 ? null : this.search.saleable //是否上架
+          }
+        }).then(resp => { //必须使用箭头函数，不然this.goodsList收取不到数据
+          this.items = resp.data.items;
+          this.totalItems = resp.data.total;
+          // 完成赋值以后，把加载状态赋值为false
           this.loading = false;
-        }, 300)
+        }).catch(() => {
+          this.items = [];
+          this.totalItems = 0;
+          this.loading = false;
+        })
       }
     }
   }

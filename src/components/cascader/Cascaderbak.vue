@@ -1,13 +1,10 @@
 <template>
-
-  <!--子组件内容最后会在插槽处显示-->
-  <cas :data="options" :load-data="loadOption" @on-change="handleChange">
-
-<v-select :label="label" chips clearable v-model="selected" tags :required="required"
+  <cas :data="data" @on-change="handleChange" :loadData="loadOption" transfer>
+    <v-select :label="label" chips clearable v-model="selected" tags :required="required"
       :rules="defaultRules">
       <template slot="selection" slot-scope="data">
         <v-chip @click.stop="" v-if="multiple" close @input="remove(data.item)" small outline color="green">
-          {{ data.item.label}}&nbsp
+          {{ data.item.label}}&nbsp;
         </v-chip>
         <v-chip @click.stop="" v-else small>{{ data.item}}</v-chip>
       </template>
@@ -62,17 +59,12 @@
     },
     data() {
       return {
-        options: [{
-          value: '1',
-          label: '北京',
-          children: []
-        }],
+        options: [],
         selected: [],
         defaultRules:[]
       }
     },
     methods: {
-
       handleChange(value, selectedData) {
         // 获取最后一级
         const option = selectedData[selectedData.length - 1];
@@ -123,7 +115,7 @@
                 value: d[this.itemValue],
                 label: d[this.itemText]
               }
-              if (d.parent) {
+              if (d.isParent) {
                 node['children'] = [];
                 node['loading'] = false;
               }
@@ -153,7 +145,7 @@
     },
     created() {
       this.loadData(0).then(data => {
-         this.options = data;
+        this.options = data;
       })
       if(this.required){
         this.defaultRules.push(v => v.length > 0 || this.label + "不能为空");
